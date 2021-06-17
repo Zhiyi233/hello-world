@@ -1,0 +1,74 @@
+#include <sys/wait.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
+
+#define MAX 1024
+#define MAX_LINE 1024
+
+int main(int argc, char **argv){
+    char buf[MAX_LINE];     //buffer
+    FILE *fp;               //file pointer
+    //int len;                //length of each line
+    char *delim = " ";
+    char *token;
+    char **tokens = malloc(MAX_LINE * sizeof(char*));
+    int position = 0;       //the position of tokens
+
+    if((fp = fopen("script.sh.txt","r")) == NULL){
+        printf("fail to read\n");
+        exit(1);
+    }
+
+//    char *line = NULL;
+//    ssize_t bufsize = 0; // 利用 getline 帮助我们分配缓冲区
+//    getline(&line, &bufsize, stdin);
+//    printf("%s \n", &line);
+//    fgets(buf, MAX_LINE,fp);
+//    printf("%s \n",buf);
+    //char first = strtok(buf, delim);
+
+//    printf("%s\n",strtok(buf, delim));
+//
+//    while ((p = strtok(NULL, delim))){
+//        printf("%s \n", p);
+//    }
+    while (fgets(buf, MAX_LINE,fp) != NULL){
+        //split each command
+        token = strtok(buf, delim);
+
+        while (token != NULL){
+            tokens[position] = token;
+            printf("%s \n", token);
+            position++;
+            token = strtok(NULL, delim);
+        }
+
+        tokens[position] = NULL;
+    }
+
+    return 0;
+//    int fd[2];
+//    pid_t pid;
+//    char line[MAX];
+//
+//    if (pipe(fd) < 0){
+//        perror("pipe error");
+//        exit(EXIT_FAILURE);
+//    }
+//    pid = fork();
+//
+//    if (pid < 0){
+//        perror("fork error");
+//        exit(EXIT_FAILURE);
+//    } else if (pid > 0){
+//        /*parent code*/
+//        close(fd[0]);
+//
+//    } else{
+//        //Child code
+//
+//    }
+}
+
